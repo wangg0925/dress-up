@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 from PIL import Image
-from utils_ootd import get_mask_location
+from mask import get_mask_location
 
 PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
 sys.path.insert(0, str(PROJECT_ROOT))
