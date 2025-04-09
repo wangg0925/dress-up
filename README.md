@@ -1,5 +1,5 @@
 # Dress-Up
-This repository changed based on the official implementation of OOTDiffusion
+This repository is changed based on the official implementation of OOTDiffusion
 
 ## Installation
 1. Clone the repository
