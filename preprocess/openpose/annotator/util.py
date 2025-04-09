@@ -5,11 +5,6 @@ import cv2
 import os
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).absolute().parents[3].absolute()
-
-annotator_ckpts_path = os.path.join(PROJECT_ROOT, 'checkpoints/openpose/ckpts')
-# print(annotator_ckpts_path)
-
 def HWC3(x):
     assert x.dtype == np.uint8
     if x.ndim == 2:

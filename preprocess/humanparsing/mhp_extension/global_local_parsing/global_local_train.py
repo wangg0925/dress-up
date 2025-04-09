@@ -219,7 +219,9 @@ def main():
                 'cycle_n': cycle_n,
             }, False, args.log_dir, filename='schp_{}_checkpoint.pth.tar'.format(cycle_n))
 
-        torch.cuda.empty_cache()
+        if (epoch + 1) % 5 == 0:  # 每5个epoch释放一次缓存
+            torch.cuda.empty_cache()
+        # torch.cuda.empty_cache()
         end = timeit.default_timer()
         print('epoch = {} of {} completed using {} s'.format(epoch, args.epochs,
                                                              (end - start) / (epoch - start_epoch + 1)))

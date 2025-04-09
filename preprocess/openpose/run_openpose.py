@@ -17,15 +17,15 @@ import json
 
 # from pytorch_lightning import seed_everything
 from preprocess.openpose.annotator.util import resize_image, HWC3
-from preprocess.openpose.annotator.openpose import OpenposeDetector
+from preprocess.openpose.annotator.base import OpenposeDetector
 
 import argparse
 from PIL import Image
 import torch
 import pdb
 
-# os.environ['CUDA_VISIBLE_DEVICES'] = '0,1,2,3'
-
+#| default_exp run_openpose
+#| export
 class OpenPose:
     def __init__(self, gpu_id: int):
         # self.gpu_id = gpu_id

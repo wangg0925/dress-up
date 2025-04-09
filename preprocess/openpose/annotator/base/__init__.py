@@ -9,18 +9,16 @@ import pdb
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
 
+# 设置 max_split_size_mb
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "max_split_size_mb:128"
+
 import torch
 import numpy as np
 from . import util
 from .body import Body
 from .hand import Hand
 from .face import Face
-from annotator.util import annotator_ckpts_path
-
-body_model_path = "https://huggingface.co/lllyasviel/Annotators/resolve/main/body_pose_model.pth"
-hand_model_path = "https://huggingface.co/lllyasviel/Annotators/resolve/main/hand_pose_model.pth"
-face_model_path = "https://huggingface.co/lllyasviel/Annotators/resolve/main/facenet.pth"
-
+from asset import annotator_ckpts_path  #,body_model_path, hand_model_path, face_model_path
 
 def draw_pose(pose, H, W, draw_body=True, draw_hand=True, draw_face=True):
     bodies = pose['bodies']
@@ -48,9 +46,9 @@ class OpenposeDetector:
         # hand_modelpath = os.path.join(annotator_ckpts_path, "hand_pose_model.pth")
         # face_modelpath = os.path.join(annotator_ckpts_path, "facenet.pth")
 
-        if not os.path.exists(body_modelpath):
-            from basicsr.utils.download_util import load_file_from_url
-            load_file_from_url(body_model_path, model_dir=annotator_ckpts_path)
+        # if not os.path.exists(body_modelpath):
+        #     from basicsr.utils.download_util import load_file_from_url
+        #     load_file_from_url(body_model_path, model_dir=annotator_ckpts_path)
 
         # if not os.path.exists(hand_modelpath):
         #     from basicsr.utils.download_util import load_file_from_url

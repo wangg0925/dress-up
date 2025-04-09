@@ -5,48 +5,44 @@ from mask import get_mask_location
 
 PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
 sys.path.insert(0, str(PROJECT_ROOT))
+# print(PROJECT_ROOT)
+
+import os
+OUTPUT = os.path.abspath('output') 
+new_dir = Path(OUTPUT)
+if not new_dir.exists():
+    try:
+        new_dir.mkdir()
+        # print(f"目录 {new_dir} 创建成功！")
+    except PermissionError:
+        print(f"没有权限创建目录 {new_dir}。")
+else:
+    # print(f"目录 {new_dir} 已经存在。")
+    pass
 
 from preprocess.openpose.run_openpose import OpenPose
 from preprocess.humanparsing.run_parsing import Parsing
 from ootd.inference_ootd_hd import OOTDiffusionHD
 from ootd.inference_ootd_dc import OOTDiffusionDC
-import argparse
 
-def main():
-    parser = argparse.ArgumentParser(description='run ootd')
-    parser.add_argument('--gpu_id', '-g', type=int, default=0, required=False)
-    parser.add_argument('--model_path', type=str, default="", required=True)
-    parser.add_argument('--cloth_path', type=str, default="", required=True)
-    parser.add_argument('--model_type', type=str, default="hd", required=False)
-    parser.add_argument('--category', '-c', type=int, default=0, required=False)
-    parser.add_argument('--scale', type=float, default=2.0, required=False)
-    parser.add_argument('--step', type=int, default=20, required=False)
-    parser.add_argument('--sample', type=int, default=4, required=False)
-    parser.add_argument('--seed', type=int, default=-1, required=False)
-    args = parser.parse_args()
+from datetime import datetime
 
+# model_type - "hd" or "dc"
+# category - 0:upperbody; 1:lowerbody; 2:dress
+category_dict = ['upperbody', 'lowerbody', 'dress']
+category_dict_utils = ['upper_body', 'lower_body', 'dresses']
 
-    openpose_model = OpenPose(args.gpu_id)
-    parsing_model = Parsing(args.gpu_id)
+def main(model_path, cloth_path, gpu_id=0, model_type="hd", category=0, image_scale=2.0, n_steps=20, n_samples=4, seed=-1):
+    formatted_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"start time: {formatted_now}")
 
-
-    category_dict = ['upperbody', 'lowerbody', 'dress']
-    category_dict_utils = ['upper_body', 'lower_body', 'dresses']
-
-    model_type = args.model_type # "hd" or "dc"
-    category = args.category # 0:upperbody; 1:lowerbody; 2:dress
-    cloth_path = args.cloth_path
-    model_path = args.model_path
-
-    image_scale = args.scale
-    n_steps = args.step
-    n_samples = args.sample
-    seed = args.seed
+    openpose_model = OpenPose(gpu_id)
+    parsing_model = Parsing(gpu_id)
 
     if model_type == "hd":
-        model = OOTDiffusionHD(args.gpu_id)
+        model = OOTDiffusionHD(1)
     elif model_type == "dc":
-        model = OOTDiffusionDC(args.gpu_id)
+        model = OOTDiffusionDC(1)
     else:
         raise ValueError("model_type must be \'hd\' or \'dc\'!")
     if model_type == 'hd' and category != 0:
@@ -78,10 +74,10 @@ def main():
     )
     print ('images generated!')
 
-    image_idx = 0
-    for image in images:
-        image.save('./output/out_' + model_type + '_' + str(image_idx) + '.png')
-        image_idx += 1
+    images[-1].save(OUTPUT + '/out_' + model_type + '.png')
+
+    formatted_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    print(f"end time: {formatted_now}")
 
 if __name__ == '__main__':
     main()

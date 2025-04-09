@@ -1,0 +1,5 @@
+# package/kagglehub_requirements.yaml
+dependencies:
+  - dataset: some_dataset:v1
+  - model: some_model:v2
+  - notebook: some_notebook:v3

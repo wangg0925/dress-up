@@ -12,3 +12,6 @@ gradio==4.16.0
 config==0.5.1
 einops==0.7.0
 onnxruntime==1.16.2
+huggingface_hub==0.20.0
+peft==0.8.0
+basicsr==1.4.2

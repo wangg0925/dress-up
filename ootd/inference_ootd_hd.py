@@ -23,12 +23,10 @@ import torch.nn as nn
 import torch.nn.functional as F
 from transformers import AutoProcessor, CLIPVisionModelWithProjection
 from transformers import CLIPTextModel, CLIPTokenizer
+from asset import VIT_PATH, VAE_PATH, UNET_PATH, MODEL_PATH
 
-VIT_PATH = "../checkpoints/clip-vit-large-patch14"
-VAE_PATH = "../checkpoints/ootd"
-UNET_PATH = "../checkpoints/ootd/ootd_hd/checkpoint-36000"
-MODEL_PATH = "../checkpoints/ootd"
-
+#| default_exp inference_ootd_hd
+#| export
 class OOTDiffusionHD:
 
     def __init__(self, gpu_id):
@@ -38,19 +36,19 @@ class OOTDiffusionHD:
         vae = AutoencoderKL.from_pretrained(
             VAE_PATH,
             subfolder="vae",
-            torch_dtype=torch.float32,
+            torch_dtype=torch.float16,
         )
 
         unet_garm = UNetGarm2DConditionModel.from_pretrained(
             UNET_PATH,
             subfolder="unet_garm",
-            torch_dtype=torch.float32,
+            torch_dtype=torch.float16,
             use_safetensors=True,
         )
         unet_vton = UNetVton2DConditionModel.from_pretrained(
             UNET_PATH,
             subfolder="unet_vton",
-            torch_dtype=torch.float32,
+            torch_dtype=torch.float16,
             use_safetensors=True,
         )
 
@@ -59,7 +57,7 @@ class OOTDiffusionHD:
             unet_garm=unet_garm,
             unet_vton=unet_vton,
             vae=vae,
-            torch_dtype=torch.float32,
+            torch_dtype=torch.float16,
             variant="fp16",
             use_safetensors=True,
             safety_checker=None,
