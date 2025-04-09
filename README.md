@@ -21,8 +21,8 @@ pip install -r requirements.txt
 1. Half-body model
 
 ```sh
-cd OOTDiffusion/run
-python run_ootd.py --model_path <model-image-path> --cloth_path <cloth-image-path> --scale 2.0 --sample 4
+cd dress-up/run
+python run.py --model_path <model-image-path> --cloth_path <cloth-image-path> --scale 2.0 --sample 4
 ```
 
 2. Full-body model 
@@ -30,6 +30,6 @@ python run_ootd.py --model_path <model-image-path> --cloth_path <cloth-image-pat
 > Garment category must be paired: 0 = upperbody; 1 = lowerbody; 2 = dress
 
 ```sh
-cd OOTDiffusion/run
-python run_ootd.py --model_path <model-image-path> --cloth_path <cloth-image-path> --model_type dc --category 2 --scale 2.0 --sample 4
+cd dress-up/run
+python run.py --model_path <model-image-path> --cloth_path <cloth-image-path> --model_type dc --category 2 --scale 2.0 --sample 4
 ```
