@@ -13,11 +13,9 @@ new_dir = Path(OUTPUT)
 if not new_dir.exists():
     try:
         new_dir.mkdir()
-        # print(f"目录 {new_dir} 创建成功！")
     except PermissionError:
         print(f"没有权限创建目录 {new_dir}。")
 else:
-    # print(f"目录 {new_dir} 已经存在。")
     pass
 
 from preprocess.openpose.run_openpose import OpenPose
@@ -32,9 +30,23 @@ from datetime import datetime
 category_dict = ['upperbody', 'lowerbody', 'dress']
 category_dict_utils = ['upper_body', 'lower_body', 'dresses']
 
+def clear_folder():
+    if os.path.exists(OUTPUT):
+        for item in os.listdir(OUTPUT):
+            item_path = os.path.join(OUTPUT, item)
+            if os.path.isfile(item_path):
+                try:
+                    os.remove(item_path)
+                except Exception as e:
+                    print(f"删除文件 {item_path} 时出错: {e}")
+    else:
+        pass
+
 def main(model_path, cloth_path, gpu_id=0, model_type="hd", category=0, image_scale=2.0, n_steps=20, n_samples=4, seed=-1):
     formatted_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"start time: {formatted_now}")
+
+    clear_folder()
 
     openpose_model = OpenPose(gpu_id)
     parsing_model = Parsing(gpu_id)
