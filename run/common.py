@@ -21,23 +21,23 @@ def is_image(url):
     file_extension = os.path.splitext(url)[1].lower()
     return file_extension in valid_extensions
 
-def is_image_post(url):
-    if not is_url(url):
-        return False
-    try:
-        response = requests.head(url)
-        content_type = response.headers.get('Content-Type')
-        if content_type and content_type.startswith('image/'):
-            return True
-        return False
-    except:
-        return False
+# def is_image_post(url):
+#     if not is_url(url):
+#         return False
+#     try:
+#         response = requests.head(url)
+#         content_type = response.headers.get('Content-Type')
+#         if content_type and content_type.startswith('image/'):
+#             return True
+#         return False
+#     except:
+#         return False
 
 def get_image(url, download=False):
     if not is_image(url):
         image = Image.open(url)
-    elif not is_image_post(url):
-        raise ValueError("提供的URL不是有效的图片链接。")
+        return image.resize((768, 1024))
+
     try:
         response = requests.get(url)
         response.raise_for_status()
