@@ -2,6 +2,7 @@ from pathlib import Path
 import sys
 from PIL import Image
 from mask import get_mask_location
+from common import get_image
 
 PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
 sys.path.insert(0, str(PROJECT_ROOT))
@@ -61,8 +62,8 @@ def main(model_path, cloth_path, gpu_id=0, model_type="hd", category=0, image_sc
     if model_type == 'hd' and category != 0:
         raise ValueError("model_type \'hd\' requires category == 0 (upperbody)!")
 
-    cloth_img = Image.open(cloth_path).resize((768, 1024))
-    model_img = Image.open(model_path).resize((768, 1024))
+    cloth_img = get_image(cloth_path)
+    model_img = get_image(model_path)
     keypoints = openpose_model(model_img.resize((384, 512)))
 
     model_parse, _ = parsing_model(model_img.resize((384, 512)))
