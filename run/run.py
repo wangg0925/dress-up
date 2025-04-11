@@ -49,6 +49,7 @@ def main(model_path, cloth_path, gpu_id=0, model_type="hd", category=0, image_sc
     clear_folder()
 
     openpose_model = OpenPose(gpu_id)
+
     parsing_model = Parsing(gpu_id)
 
     if model_type == "hd":
@@ -63,6 +64,7 @@ def main(model_path, cloth_path, gpu_id=0, model_type="hd", category=0, image_sc
     cloth_img = Image.open(cloth_path).resize((768, 1024))
     model_img = Image.open(model_path).resize((768, 1024))
     keypoints = openpose_model(model_img.resize((384, 512)))
+
     model_parse, _ = parsing_model(model_img.resize((384, 512)))
 
     mask, mask_gray = get_mask_location(model_type, category_dict_utils[category], model_parse, keypoints)

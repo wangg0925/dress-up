@@ -45,6 +45,7 @@ class OOTDiffusionHD:
             torch_dtype=torch.float16,
             use_safetensors=True,
         )
+
         unet_vton = UNetVton2DConditionModel.from_pretrained(
             UNET_PATH,
             subfolder="unet_vton",
@@ -58,21 +59,25 @@ class OOTDiffusionHD:
             unet_vton=unet_vton,
             vae=vae,
             torch_dtype=torch.float16,
-            variant="fp16",
-            use_safetensors=True,
+            # variant="fp16",
+            # use_safetensors=True,
+            revision="fp16",
+            use_safetensors=False,
             safety_checker=None,
             requires_safety_checker=False,
         ).to(self.device)
 
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
-        
+
         self.auto_processor = AutoProcessor.from_pretrained(VIT_PATH)
+
         self.image_encoder = CLIPVisionModelWithProjection.from_pretrained(VIT_PATH).to(self.device)
 
         self.tokenizer = CLIPTokenizer.from_pretrained(
             MODEL_PATH,
             subfolder="tokenizer",
         )
+
         self.text_encoder = CLIPTextModel.from_pretrained(
             MODEL_PATH,
             subfolder="text_encoder",
@@ -126,6 +131,7 @@ class OOTDiffusionHD:
                         image_guidance_scale=image_scale,
                         num_images_per_prompt=num_samples,
                         generator=generator,
+                        use_fast=False
             ).images
 
         return images

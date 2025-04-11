@@ -325,13 +325,13 @@ class BasicTransformerBlock(nn.Module):
             num_chunks = norm_hidden_states.shape[self._chunk_dim] // self._chunk_size
             ff_output = torch.cat(
                 [
-                    self.ff(hid_slice, scale=lora_scale)
+                    self.ff(hid_slice)#, scale=lora_scale)
                     for hid_slice in norm_hidden_states.chunk(num_chunks, dim=self._chunk_dim)
                 ],
                 dim=self._chunk_dim,
             )
         else:
-            ff_output = self.ff(norm_hidden_states, scale=lora_scale)
+            ff_output = self.ff(norm_hidden_states)#, scale=lora_scale)
 
         if self.use_ada_layer_norm_zero:
             ff_output = gate_mlp.unsqueeze(1) * ff_output
@@ -396,7 +396,7 @@ class FeedForward(nn.Module):
         compatible_cls = (GEGLU,) if USE_PEFT_BACKEND else (GEGLU, LoRACompatibleLinear)
         for module in self.net:
             if isinstance(module, compatible_cls):
-                hidden_states = module(hidden_states, scale)
+                hidden_states = module(hidden_states)#, scale)
             else:
                 hidden_states = module(hidden_states)
         return hidden_states

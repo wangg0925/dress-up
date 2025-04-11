@@ -59,8 +59,10 @@ class OOTDiffusion:
             unet_vton=unet_vton,
             vae=vae,
             torch_dtype=torch.float16,
-            variant="fp16",
-            use_safetensors=True,
+            # variant="fp16",
+            # use_safetensors=True,
+            revision="fp16",
+            use_safetensors=False,
             safety_checker=None,
             requires_safety_checker=False,
         ).to(self.device)
@@ -127,6 +129,7 @@ class OOTDiffusion:
                         image_guidance_scale=image_scale,
                         num_images_per_prompt=num_samples,
                         generator=generator,
+                        use_fast=False
             ).images
 
         return images
