@@ -2,7 +2,6 @@ from pathlib import Path
 import sys
 from PIL import Image
 from mask import get_mask_location
-from common import get_image
 
 PROJECT_ROOT = Path(__file__).absolute().parents[1].absolute()
 sys.path.insert(0, str(PROJECT_ROOT))
@@ -43,27 +42,26 @@ def clear_folder():
     else:
         pass
 
-def main(model_path, cloth_path, gpu_id=0, model_type="hd", category=0, image_scale=2.0, n_steps=20, n_samples=4, seed=-1):
+def run(model_path, cloth_path, gpu_id=0, high_gpu_id=0, model_type="hd", category=0, image_scale=2.0, n_steps=20, n_samples=4, seed=-1):
     formatted_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"start time: {formatted_now}")
 
     clear_folder()
 
     openpose_model = OpenPose(gpu_id)
-
     parsing_model = Parsing(gpu_id)
 
     if model_type == "hd":
-        model = OOTDiffusionHD(1)
+        model = OOTDiffusionHD(high_gpu_id)
     elif model_type == "dc":
-        model = OOTDiffusionDC(1)
+        model = OOTDiffusionDC(high_gpu_id)
     else:
         raise ValueError("model_type must be \'hd\' or \'dc\'!")
     if model_type == 'hd' and category != 0:
         raise ValueError("model_type \'hd\' requires category == 0 (upperbody)!")
 
-    cloth_img = get_image(cloth_path)
-    model_img = get_image(model_path)
+    cloth_img = Image.open(cloth_path).resize((768, 1024))
+    model_img = Image.open(model_path).resize((768, 1024))
     keypoints = openpose_model(model_img.resize((384, 512)))
 
     model_parse, _ = parsing_model(model_img.resize((384, 512)))
@@ -93,6 +91,3 @@ def main(model_path, cloth_path, gpu_id=0, model_type="hd", category=0, image_sc
 
     formatted_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"end time: {formatted_now}")
-
-if __name__ == '__main__':
-    main()
