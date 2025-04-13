@@ -87,7 +87,7 @@ def run(model_path, cloth_path, out_path, gpu_id=0, high_gpu_id=0, model_type="h
     )
     print ('images generated!')
 
-    images[-1].save(OUTPUT + '/out_' + out_path + '.png')
+    images[-1].save(OUTPUT + '/' + out_path + '.png')
 
     formatted_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"end time: {formatted_now}")
