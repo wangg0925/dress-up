@@ -42,7 +42,7 @@ def clear_folder():
     else:
         pass
 
-def run(model_path, cloth_path, gpu_id=0, high_gpu_id=0, model_type="hd", category=0, image_scale=2.0, n_steps=20, n_samples=4, seed=-1):
+def run(model_path, cloth_path, out_path, gpu_id=0, high_gpu_id=0, model_type="hd", category=0, image_scale=2.0, n_steps=20, n_samples=4, seed=-1):
     formatted_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"start time: {formatted_now}")
 
@@ -87,7 +87,7 @@ def run(model_path, cloth_path, gpu_id=0, high_gpu_id=0, model_type="hd", catego
     )
     print ('images generated!')
 
-    images[-1].save(OUTPUT + '/out_' + model_type + '.png')
+    images[-1].save(OUTPUT + '/out_' + out_path + '.png')
 
     formatted_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     print(f"end time: {formatted_now}")
